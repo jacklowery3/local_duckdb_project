@@ -1,0 +1,7 @@
+local_duckdb_project:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: /Users/jacklowery/dbt_jack/local_duckdb_project/dev.duckdb
+      threads: 4

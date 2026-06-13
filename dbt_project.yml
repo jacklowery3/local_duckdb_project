@@ -1,0 +1,28 @@
+name: local_duckdb_project
+
+profile: local_duckdb_project
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+on-run-start:
+  - "INSTALL httpfs FROM core; LOAD httpfs;"
+  - "INSTALL iceberg FROM core; LOAD iceberg;"
+  - "ATTACH 'boarding_debating' AS fivetran_lakehouse (TYPE ICEBERG, ENDPOINT 'https://handle-snub.us-east-1.aws.polaris.fivetran.com/api/catalog', SECRET polaris_secret, DEFAULT_REGION 'us-west-2');"
+
+vars:
+  # GitHub package
+  github_database: fivetran_lakehouse
+  github_schema: github
+
+  # Fivetran Log package
+  fivetran_platform_database: fivetran_lakehouse
+  fivetran_platform_schema: fivetran_log
+  fivetran_platform_using_destination_membership: false
+
+models:
+  local_duckdb_project:
+    +materialized: table

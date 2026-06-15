@@ -1,0 +1,27 @@
+select
+    id,
+    day,
+    timestamp as activity_timestamp,
+    score as activity_score,
+    active_calories,
+    total_calories,
+    target_calories,
+    steps,
+    equivalent_walking_distance,
+    low_activity_time,
+    medium_activity_time,
+    high_activity_time,
+    non_wear_time,
+    resting_time,
+    sedentary_time,
+    sedentary_met_minutes,
+    average_met_minutes,
+    contributors_meet_daily_targets,
+    contributors_move_every_hour,
+    contributors_recovery_time,
+    contributors_stay_active,
+    contributors_training_frequency,
+    contributors_training_volume,
+    _fivetran_synced
+from {{ source('oura_ring_data', 'daily_activity') }}
+where not coalesce(_fivetran_deleted, false)

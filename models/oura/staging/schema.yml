@@ -1,0 +1,164 @@
+version: 2
+
+models:
+  - name: stg_oura__daily_activity
+    description: >
+      Daily activity summary from the Oura Ring. One row per day. Filters soft-deleted records.
+    columns:
+      - name: id
+        description: Unique identifier for the daily activity record.
+        tests:
+          - unique
+          - not_null
+      - name: day
+        description: The calendar date of the activity record.
+        tests:
+          - unique
+          - not_null
+      - name: activity_score
+        description: Oura's composite activity score for the day (0–100).
+      - name: steps
+        description: Total step count for the day.
+      - name: active_calories
+        description: Calories burned through active movement.
+      - name: total_calories
+        description: Total calories burned including resting metabolic rate.
+      - name: target_calories
+        description: Oura's recommended calorie burn target for the day.
+      - name: equivalent_walking_distance
+        description: Distance in meters equivalent to the day's activity.
+      - name: high_activity_time
+        description: Minutes spent in high-intensity activity.
+      - name: medium_activity_time
+        description: Minutes spent in medium-intensity activity.
+      - name: low_activity_time
+        description: Minutes spent in low-intensity activity.
+      - name: sedentary_time
+        description: Minutes spent sedentary.
+      - name: resting_time
+        description: Minutes spent resting.
+      - name: non_wear_time
+        description: Minutes the ring was not worn.
+      - name: average_met_minutes
+        description: Average metabolic equivalent minutes for the day.
+
+  - name: stg_oura__daily_readiness
+    description: >
+      Daily readiness score and contributing factors from the Oura Ring. One row per day.
+    columns:
+      - name: id
+        description: Unique identifier for the daily readiness record.
+        tests:
+          - unique
+          - not_null
+      - name: day
+        description: The calendar date of the readiness record.
+        tests:
+          - unique
+          - not_null
+      - name: readiness_score
+        description: Oura's composite readiness score (0–100). Reflects recovery and preparedness.
+      - name: temperature_deviation
+        description: Skin temperature deviation from the user's baseline (°C).
+      - name: temperature_trend_deviation
+        description: Trend-adjusted skin temperature deviation (°C).
+      - name: contributors_activity_balance
+        description: Contributor score reflecting balance between activity and recovery.
+      - name: contributors_body_temperature
+        description: Contributor score from body temperature stability.
+      - name: contributors_hrv_balance
+        description: Contributor score from HRV relative to baseline.
+      - name: contributors_previous_day_activity
+        description: Contributor score reflecting previous day's activity load.
+      - name: contributors_previous_night
+        description: Contributor score from the previous night's sleep quality.
+      - name: contributors_recovery_index
+        description: Contributor score measuring recovery speed after sleep.
+      - name: contributors_resting_heart_rate
+        description: Contributor score from resting heart rate relative to baseline.
+      - name: contributors_sleep_balance
+        description: Contributor score reflecting cumulative sleep balance over recent days.
+
+  - name: stg_oura__daily_sleep
+    description: >
+      Daily sleep score and contributing factors from the Oura Ring. One row per day.
+    columns:
+      - name: id
+        description: Unique identifier for the daily sleep record.
+        tests:
+          - unique
+          - not_null
+      - name: day
+        description: The calendar date the sleep is attributed to (wake date).
+        tests:
+          - unique
+          - not_null
+      - name: sleep_score
+        description: Oura's composite sleep score (0–100).
+      - name: contributors_deep_sleep
+        description: Contributor score from the amount of deep (slow-wave) sleep.
+      - name: contributors_efficiency
+        description: Contributor score from sleep efficiency (time asleep / time in bed).
+      - name: contributors_latency
+        description: Contributor score from sleep latency (time to fall asleep).
+      - name: contributors_rem_sleep
+        description: Contributor score from REM sleep duration.
+      - name: contributors_restfulness
+        description: Contributor score from sleep restfulness (movement and disturbances).
+      - name: contributors_timing
+        description: Contributor score from sleep timing relative to circadian baseline.
+      - name: contributors_total_sleep
+        description: Contributor score from total sleep duration.
+
+  - name: stg_oura__daily_stress
+    description: >
+      Daily stress and recovery summary from the Oura Ring. One row per day.
+    columns:
+      - name: id
+        description: Unique identifier for the daily stress record.
+        tests:
+          - unique
+          - not_null
+      - name: day
+        description: The calendar date of the stress record.
+        tests:
+          - unique
+          - not_null
+      - name: stress_high
+        description: Minutes spent in a high-stress state during the day.
+      - name: recovery_high
+        description: Minutes spent in a high-recovery state during the day.
+      - name: day_summary
+        description: Oura's text classification of the day (e.g. "restored", "stressful", "normal").
+
+  - name: stg_oura__workout
+    description: >
+      Individual workout sessions logged via the Oura Ring or connected apps. One row per workout.
+    columns:
+      - name: id
+        description: Unique identifier for the workout session.
+        tests:
+          - unique
+          - not_null
+      - name: day
+        description: The calendar date the workout occurred.
+        tests:
+          - not_null
+      - name: activity
+        description: Type of activity (e.g. "walking", "running", "cycling").
+      - name: intensity
+        description: Workout intensity level as reported by Oura (e.g. "easy", "moderate", "hard").
+      - name: label
+        description: User-defined label for the workout session.
+      - name: source
+        description: Source of the workout data (e.g. "confirmed", "workout_heart_rate").
+      - name: start_datetime
+        description: Timestamp when the workout began.
+      - name: end_datetime
+        description: Timestamp when the workout ended.
+      - name: duration_minutes
+        description: Derived workout duration in minutes (end - start).
+      - name: calories
+        description: Estimated calories burned during the workout.
+      - name: distance
+        description: Distance covered during the workout in meters.

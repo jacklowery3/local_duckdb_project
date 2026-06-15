@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: oura_ring_data
+    database: fivetran_lakehouse
+    schema: oura_ring_data
+    tables:
+      - name: daily_activity
+      - name: daily_readiness
+      - name: daily_sleep
+      - name: daily_stress
+      - name: workout
+      - name: heart_rate
+      - name: sleep
+      - name: personal_info

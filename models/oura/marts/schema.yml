@@ -1,0 +1,93 @@
+version: 2
+
+models:
+  - name: oura__daily_summary
+    description: >
+      One row per day combining Oura Ring activity, readiness, sleep, and stress data.
+      The primary mart model for day-level health trend analysis. Days with missing
+      data in any dimension still appear — scores are null rather than dropped.
+    columns:
+      - name: day
+        description: Calendar date. Primary key for this model.
+        tests:
+          - unique
+          - not_null
+      - name: activity_score
+        description: Oura activity score for the day (0–100).
+      - name: readiness_score
+        description: Oura readiness score for the day (0–100).
+      - name: sleep_score
+        description: Oura sleep score for the day (0–100).
+      - name: avg_score
+        description: >
+          Simple average of whichever scores are non-null on a given day.
+          Useful as a single daily health index.
+      - name: steps
+        description: Total steps taken on the day.
+      - name: active_calories
+        description: Calories burned through active movement.
+      - name: total_calories
+        description: Total calories burned including resting metabolic rate.
+      - name: high_activity_time
+        description: Minutes in high-intensity activity.
+      - name: medium_activity_time
+        description: Minutes in medium-intensity activity.
+      - name: sedentary_time
+        description: Minutes spent sedentary.
+      - name: temperature_deviation
+        description: Skin temperature deviation from baseline (°C). Useful for illness/cycle detection.
+      - name: contributors_hrv_balance
+        description: HRV balance contributor to readiness (0–100). Low values indicate under-recovery.
+      - name: contributors_resting_heart_rate
+        description: Resting heart rate contributor to readiness (0–100).
+      - name: contributors_recovery_index
+        description: Recovery speed contributor to readiness (0–100).
+      - name: contributors_deep_sleep
+        description: Deep sleep contributor to sleep score (0–100).
+      - name: contributors_rem_sleep
+        description: REM sleep contributor to sleep score (0–100).
+      - name: contributors_efficiency
+        description: Sleep efficiency contributor to sleep score (0–100).
+      - name: contributors_restfulness
+        description: Restfulness contributor to sleep score (0–100).
+      - name: stress_high
+        description: Minutes in high-stress state.
+      - name: recovery_high
+        description: Minutes in high-recovery state.
+      - name: stress_summary
+        description: Oura's text classification of the day's stress/recovery balance.
+
+  - name: oura__workouts
+    description: >
+      All individual workout sessions logged through the Oura Ring or connected apps,
+      enriched with derived duration and pace. One row per workout session.
+    columns:
+      - name: id
+        description: Unique identifier for the workout session.
+        tests:
+          - unique
+          - not_null
+      - name: day
+        description: Calendar date the workout occurred.
+        tests:
+          - not_null
+      - name: activity
+        description: Workout type (e.g. "walking", "running", "yoga").
+      - name: intensity
+        description: Intensity level reported by Oura.
+      - name: label
+        description: User-defined label for the session.
+      - name: source
+        description: Source of the workout record.
+      - name: start_datetime
+        description: Workout start timestamp.
+      - name: end_datetime
+        description: Workout end timestamp.
+      - name: duration_minutes
+        description: Duration of the workout in minutes, derived from start and end timestamps.
+      - name: calories
+        description: Estimated calories burned.
+      - name: distance
+        description: Distance covered in meters.
+      - name: pace_per_minute
+        description: Distance per minute (meters/min). Null when duration or distance is zero.
